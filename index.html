@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Chat</title>
+    <style>
+      #input-div {
+        position: fixed;
+        bottom: 10px;
+      }
+      #msgs {
+        list-style-type: none
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="msgs"></ul>
+    <div id="input-div">
+      <input id="message" autocomplete="off"></input>
+      <button id="send">Send</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+      let field = document.querySelector('#message');
+      let button = document.querySelector('#send');
+      let messages = document.querySelector("#msgs");
+      button.addEventListener('click', function(e) {
+        socket.emit('chat message', field.value);
+        console.log(field.value);
+        field.value = '';
+      });
+      socket.on('chat message', function(msg) {
+        let newMsg = document.createElement('li');
+        newMsg.innerHTML = msg;
+        messages.appendChild(newMsg);
+      })
+    </script>
+  </body>
+</html>
